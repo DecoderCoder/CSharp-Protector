@@ -22,11 +22,6 @@ namespace VMCompiler
             public int Index = 0;
             public int Length = 0;
 
-            public static explicit operator string(StringType stringType)
-            {
-                return stringType.String;
-            }
-
             public StringType(string str, int index, int length)
             {
                 String = str;
@@ -61,13 +56,24 @@ namespace VMCompiler
 
         enum OpCode
         {
-            LdStr, //50
-            LdInt, //51
-            Call,  //40
-            CallC,  //41
-            Br,    //60
+            // Types
+            LdStr, //50  //Load String to Stack
+            LdInt, //51  //Load Integer to Stack
+            LdByte,//52  //Load Byte to Stack
+            // Voids
+            Call,  //40  //Call Void
+            CallC, //41 //CallCSharp Void
+            // Jumps
+            Br,    //60  //Jump to Instruction
+            // Stack & Variables
+            Pop,   //91  //Remove Top object in Stack
+            Dup,   //92  //Duplicate top object in Stack
+            StGv,  //93  //Push Top stack object to Global Variables
+            LdGv,  //94  //Load Global Variable to Stack
+            StLv,  //95  //Push Top stack object to local Variables
+            LdLv,  //95  //Load Local Variable to Stack
+            // Other
             Nop,   //90
-            Pop,   //91
             Ret    //22
         }
 
@@ -85,7 +91,6 @@ namespace VMCompiler
 
         class VoidType
         {
-            // void ([a-zA-Z0-9]{1,})\n{\n(?:\n*.*?\n*){1,}}
             public string Name;
             public int Index = 0;
             public int Length = 0;
@@ -113,6 +118,13 @@ namespace VMCompiler
                             Length += 9;
                         }
                             break;
+                        case OpCode.LdByte:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, Convert.ToByte(str[i].Substring(str[i].IndexOf(" ") + 3), 16));
+                            Length += 2;
+                        }
+                            break;
                         case OpCode.LdInt:
                         {
                             Instructions[Instructions.Length - 1] =
@@ -134,6 +146,22 @@ namespace VMCompiler
                             Length += 1;
                         }
                             break;
+
+                        case OpCode.StGv:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                            Length += 5;
+                        }
+                            break;
+                        case OpCode.LdGv:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                            Length += 5;
+                        }
+                            break;
+
                         case OpCode.Ret:
                         {
                             Instructions[Instructions.Length - 1] =
@@ -152,9 +180,43 @@ namespace VMCompiler
             }
         }
 
+        class VariableType
+        {
+            public string Name;
+            public int Index;
+
+            public VariableType(string name, int index)
+            {
+                Name = name;
+                Index = index;
+            }
+        }
+
+        class VariablesContainer
+        {
+            private VariableType[] variables = new VariableType[0];
+
+            public VariableType this[string name]
+            {
+                get { return variables.First(x => x.Name == name); }
+            }
+
+            public VariableType Add(string name)
+            {
+                if (variables.Count(x => x.Name == name) == 0)
+                {
+                    Array.Resize(ref variables, variables.Length + 1);
+                    variables[variables.Length - 1] = new VariableType(name, variables.Length - 1);
+                }
+                return variables.First(x => x.Name == name);
+            }
+        }
+
         private void Compile()
         {
             StringsContainer stringsContainer = new StringsContainer();
+            VariablesContainer variablesContainer = new VariablesContainer();
+
             VoidType[] voids = new VoidType[0];
 
             int CodeSectionStart = 0;
@@ -207,6 +269,15 @@ namespace VMCompiler
                 }
             }
 
+            { //Parse Global Variables
+                Regex globals = new Regex("var ([a-zA-Z0-9]{1,});");
+                MatchCollection globalsm = globals.Matches(richTextBox1.Text);
+                foreach (Match m in globalsm)
+                {
+                    variablesContainer.Add(m.Groups[1].Value);
+                }
+            }
+
             {
                 //Generate 
                 foreach (var v in voids)
@@ -236,6 +307,15 @@ namespace VMCompiler
                                     CodeSection.Length - 4, 4);
                             }
                                 break;
+                            case OpCode.LdByte:
+                            {
+                                int oper = (byte) i.operand;
+                                Array.Resize(ref CodeSection, CodeSection.Length + 2);
+                                CodeSection[CodeSection.Length - 2] = 0x52;
+                                Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
+                                    CodeSection.Length - 1, 1);
+                                }
+                                break;
                             case OpCode.Call:
                             {
                                 string voidname = (string)i.operand;
@@ -251,6 +331,29 @@ namespace VMCompiler
                             {
                                 Array.Resize(ref CodeSection, CodeSection.Length + 1);
                                 CodeSection[CodeSection.Length - 1] = 0x91;
+                            }
+                                break;
+
+                            case OpCode.StGv:
+                            {
+                                string varname = (string) i.operand;
+                                int oper = variablesContainer[varname].Index;
+                                i.operand = oper;
+                                Array.Resize(ref CodeSection, CodeSection.Length + 5);
+                                CodeSection[CodeSection.Length - 5] = 0x93;
+                                Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
+                                    CodeSection.Length - 4, 4);
+                            }
+                                break;
+                            case OpCode.LdGv:
+                            {
+                                string varname = (string)i.operand;
+                                int oper = variablesContainer[varname].Index;
+                                i.operand = oper;
+                                Array.Resize(ref CodeSection, CodeSection.Length + 5);
+                                CodeSection[CodeSection.Length - 5] = 0x94;
+                                Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
+                                    CodeSection.Length - 4, 4);
                             }
                                 break;
                             case OpCode.Ret:
@@ -322,7 +425,7 @@ namespace VMCompiler
 
         private void Highlight(string text, int offset)
         {
-            Regex voids = new Regex(@"void");
+            Regex voids = new Regex("void ([a-zA-Z0-9]{1,})\\n{\\n(?:\\n*.*?\\n*){1,}}");
             MatchCollection voidsm = voids.Matches(text);
             foreach (Match match in voidsm)
             {
@@ -362,6 +465,14 @@ namespace VMCompiler
             foreach (Match match in callsm)
             {
                 richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#3498db");
+            }
+
+            Regex globalvars = new Regex(@"var ([a-zA-Z0-9]{1,});");
+            MatchCollection globalvarsm = globalvars.Matches(text);
+            foreach (Match match in globalvarsm)
+            {
+                richTextBox1.Select(match.Index + offset, 3);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#3498db");
             }
         }

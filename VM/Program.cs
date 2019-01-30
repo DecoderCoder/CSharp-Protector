@@ -39,7 +39,7 @@ namespace VM
         public int TextSectionOffset { get; set; }
         public int CSharpTypesSectionOffset { get; set; }
         public int ClearSectionOffset { get; set; }
-        //public object[] GlobalVariables = new object[0];
+        public object[] GlobalVariables = new object[512];
 
         public VirtualMachine(byte[] b)
         {
@@ -71,7 +71,7 @@ namespace VM
 
         public void Run(int Offset)
         {
-            //object[] LocalVariables = new object[0];
+            object[] LocalVariables = new object[0];
             while (true)
             {
                 byte curByte = Marshal.ReadByte(IntPtr.Add(MemoryPointer, CodeSectionOffset + Offset++));
@@ -91,13 +91,19 @@ namespace VM
                     }
                     case 0x51: //LdInt
                     {
-                        push(Marshal.ReadInt32(MemoryPointer + CodeSectionOffset + Offset));
+                        push(Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset));
                         Offset += 4;
-                            break;
+                        break;
+                    }
+                    case 0x52: //LdInt
+                    {
+                        push(Marshal.ReadByte(MemoryPointer, CodeSectionOffset + Offset));
+                        Offset += 1;
+                        break;
                     }
                     case 0x40: //Call C# Method
                     {
-                        Run(Marshal.ReadInt32(MemoryPointer + CodeSectionOffset + Offset));
+                        Run(Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset));
                         Offset += 4;
                         break;
                     }
@@ -114,6 +120,20 @@ namespace VM
                     case 0x91:
                     {
                         pop();
+                        break;
+                    }
+                    case 0x93:
+                    {
+                        int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
+                        Offset += 4;
+                        GlobalVariables[index] = pop();
+                        break;
+                    }
+                    case 0x94:
+                    {
+                        int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
+                        Offset += 4;
+                        push(GlobalVariables[index]);
                         break;
                     }
                     case 0x22:
