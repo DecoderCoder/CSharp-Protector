@@ -64,8 +64,14 @@ namespace VMCompiler
             // Voids
             Call,  //40  //Call Void
             CallCSharp, //41 //CallCSharp Void
+            // Compare
+            Ceq, // A1 // ==              -> 1 | 0
+            Cgt, // A2 // Value1 > Value2 -> 1 | 0
+            Cls, // A3 // Value1 < Value2 -> 1 | 0
             // Jumps
             Br,    //60  //Jump to Instruction
+            BrTrue,     //61 // == 1
+            BrFalse,    //62 // == 0
             // Stack & Variables
             Pop,   //91  //Remove Top object in Stack
             Dup,   //92  //Duplicate top object in Stack
@@ -82,6 +88,7 @@ namespace VMCompiler
         {
             public OpCode opCode;
             public object operand;
+            public int Index;
 
             public Instruction(OpCode opcode, object oper)
             {
@@ -125,32 +132,31 @@ namespace VMCompiler
                         case OpCode.LdStr:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)){Index = Length};
                             Length += 9;
                         }
                             break;
                         case OpCode.LdByte:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, Convert.ToByte(str[i].Substring(str[i].IndexOf(" ") + 3), 16));
+                                new Instruction(op, Convert.ToByte(str[i].Substring(str[i].IndexOf(" ") + 3), 16)) { Index = Length  };
                             Length += 2;
                         }
                             break;
                         case OpCode.LdInt:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, int.Parse(str[i].Substring(str[i].IndexOf(" ") + 1)));
+                                new Instruction(op, int.Parse(str[i].Substring(str[i].IndexOf(" ") + 1))) { Index = Length  };
                             Length += 5;
                         }
                             break;
                         case OpCode.Call:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) { Index = Length  };
                             Length += 5;
                         }
                             break;
-
                         case OpCode.CallCSharp:
                         {
                             string opstr = str[i].Substring(str[i].IndexOf(" ") + 1);
@@ -173,59 +179,106 @@ namespace VMCompiler
                             oper.Length = 21 + 8 * args.Length;
 
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, oper);
+                                new Instruction(op, oper) { Index = Length  };
 
                             Length += 21 + 8 * args.Length;
                         }
                             break;
-
-                        case OpCode.Pop:
+                        case OpCode.Ceq:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, null);
+                                new Instruction(op, null) { Index = Length };
                             Length += 1;
                         }
                             break;
-
+                        case OpCode.Cgt:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, null) { Index = Length };
+                            Length += 1;
+                        }
+                            break;
+                        case OpCode.Cls:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, null) { Index = Length };
+                            Length += 1;
+                        }
+                            break;
+                        case OpCode.Br:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, int.Parse(str[i].Substring(str[i].IndexOf(" ") + 1))) { Index = Length  };
+                            Length += 5;
+                        }
+                            break;
+                        case OpCode.BrTrue:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, int.Parse(str[i].Substring(str[i].IndexOf(" ") + 1))) { Index = Length };
+                            Length += 5;
+                        }
+                            break;
+                        case OpCode.BrFalse:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, int.Parse(str[i].Substring(str[i].IndexOf(" ") + 1))) { Index = Length };
+                            Length += 5;
+                        }
+                            break;
+                        case OpCode.Pop:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, null) { Index = Length  };
+                            Length += 1;
+                        }
+                            break;
+                        case OpCode.Dup:
+                        {
+                            Instructions[Instructions.Length - 1] =
+                                new Instruction(op, null) { Index = Length  };
+                            Length += 1;
+                        }
+                            break;
                         case OpCode.StGv:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) { Index = Length  };
                             Length += 5;
                         }
                             break;
                         case OpCode.LdGv:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) { Index = Length  };
                             Length += 5;
                         }
                             break;
                         case OpCode.StLv:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) { Index = Length  };
                             Length += 5;
                         }
                             break;
                         case OpCode.LdLv:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1));
+                                new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) { Index = Length  };
                             Length += 5;
                         }
                             break;
                         case OpCode.Ret:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(op, null);
+                                new Instruction(op, null) { Index = Length  };
                             Length += 1;
                         }
                             break;
                         default:
                         {
                             Instructions[Instructions.Length - 1] =
-                                new Instruction(OpCode.Nop, null);
+                                new Instruction(OpCode.Nop, null) { Index = Length  };
                             }
                             break;
                     }
@@ -424,6 +477,32 @@ namespace VMCompiler
                                     CodeSection.Length - 1, 1);
                                 }
                                 break;
+
+                            case OpCode.Br:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 5);
+                                CodeSection[CodeSection.Length - 5] = 0x60;
+                                var CurInst = Array.IndexOf(v.Instructions, i);
+                                Array.Copy(BitConverter.GetBytes(v.Instructions[CurInst + (int)i.operand].Index), 0, CodeSection, CodeSection.Length - 4, 4);
+                            }
+                                break;
+                            case OpCode.BrTrue:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 5);
+                                CodeSection[CodeSection.Length - 5] = 0x61;
+                                var CurInst = Array.IndexOf(v.Instructions, i);
+                                Array.Copy(BitConverter.GetBytes(v.Instructions[CurInst + (int)i.operand].Index), 0, CodeSection, CodeSection.Length - 4, 4);
+                            }
+                                break;
+                            case OpCode.BrFalse:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 5);
+                                CodeSection[CodeSection.Length - 5] = 0x62;
+                                var CurInst = Array.IndexOf(v.Instructions, i);
+                                Array.Copy(BitConverter.GetBytes(v.Instructions[CurInst + (int)i.operand].Index), 0, CodeSection, CodeSection.Length - 4, 4);
+                            }
+                                break;
+
                             case OpCode.Call:
                             {
                                 string voidname = (string)i.operand;
@@ -466,13 +545,36 @@ namespace VMCompiler
                                 }
                             }
                                 break;
+                            case OpCode.Ceq:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0xA1;
+                            }
+                                break;
+                            case OpCode.Cgt:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0xA2;
+                            }
+                                break;
+                            case OpCode.Cls:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0xA3;
+                            }
+                                break;
                             case OpCode.Pop:
                             {
                                 Array.Resize(ref CodeSection, CodeSection.Length + 1);
                                 CodeSection[CodeSection.Length - 1] = 0x91;
                             }
                                 break;
-
+                            case OpCode.Dup:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0x92;
+                            }
+                                break;
                             case OpCode.StGv:
                             {
                                 string varname = (string) i.operand;
