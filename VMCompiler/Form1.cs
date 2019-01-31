@@ -437,7 +437,6 @@ namespace VMCompiler
                             case OpCode.CallCSharp:
                             {
                                 CSharpVoid vd = (CSharpVoid) i.operand;
-
                                 stringsContainer.Add(vd.Name);
                                 Array.Resize(ref TextSection, TextSection.Length + vd.Name.Length);
                                 Array.Copy(Encoding.UTF8.GetBytes(vd.Name), 0, TextSection, TextSection.Length - vd.Name.Length, vd.Name.Length);

@@ -125,7 +125,6 @@ namespace VM
                         object[] arguments = new object[argcount];
                         for (int i = 0; i < argcount; i++)
                         {
-                            Console.WriteLine(CodeSectionOffset + Offset + 20 + i * 4);
                             temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 20 + i * 4)];
                             Marshal.Copy(
                                 IntPtr.Add(MemoryPointer,
