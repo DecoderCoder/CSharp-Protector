@@ -1,6 +1,8 @@
 # VM
 
-[VMCompiler](https://github.com/DecoderCoder/CSharp-Protector/tree/master/VMCompiler/Samples)
+[VMCompiler Samples](https://github.com/DecoderCoder/CSharp-Protector/tree/master/VMCompiler/Samples)
+
+![Syntax highlight](https://image.prntscr.com/image/ONmMQtlLRr2WEQ40u4Gf_A.png)
 
 ```
 using TypeName=TypeAssemblyQualifiedName;
