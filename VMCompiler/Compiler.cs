@@ -16,6 +16,16 @@ namespace VMCompiler
 
         public static void Compile(string codeString, string filename)
         {
+            { //Clean codeString
+                Regex comments = new Regex(" *\\/\\/.*");
+                int deleted = 0;
+                foreach(Match m in comments.Matches(codeString))
+                {
+                    codeString = codeString.Remove(m.Index - deleted, m.Length);
+                    deleted += m.Length;
+                }
+            }
+
             stringsContainer = new StringsContainer();
             globalVariables = new VariablesContainer();
             usingsContainer = new UsingContainer();
