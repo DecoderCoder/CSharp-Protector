@@ -71,7 +71,7 @@ namespace VM
 
         public void Run(int Offset)
         {
-            object[] LocalVariables = new object[0];
+            object[] LocalVariables = new object[512];
             while (true)
             {
                 byte curByte = Marshal.ReadByte(IntPtr.Add(MemoryPointer, CodeSectionOffset + Offset++));
@@ -109,33 +109,76 @@ namespace VM
                     }
                     case 0x41: //Call C# Method
                     {
-                        var method = typeof(System.Windows.Forms.MessageBox).GetMethod("Show", new Type[] { typeof(String) });
-                        var rez = method.Invoke(null, new[] { pop() });
+                        byte[] temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 4)];
+                        Marshal.Copy(
+                            IntPtr.Add(MemoryPointer,
+                                CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer, Offset)), temp, 0,
+                            temp.Length);
+                        string type = Encoding.UTF8.GetString(temp);
+                        temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 12)];
+                        Marshal.Copy(
+                            IntPtr.Add(MemoryPointer,
+                                TextSectionOffset + Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 8)),
+                            temp, 0, temp.Length);
+                        string voidname = Encoding.UTF8.GetString(temp);
+                        int argcount = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 16);
+                        Type[] types = new Type[argcount];
+                        object[] arguments = new object[argcount];
+                        for (int i = 0; i < argcount; i++)
+                        {
+                            Console.WriteLine(CodeSectionOffset + Offset + 20 + i * 4);
+                            temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 20 + i * 4)];
+                            Marshal.Copy(
+                                IntPtr.Add(MemoryPointer,
+                                    CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer,
+                                        CodeSectionOffset + Offset + 24 + i * 4)), temp, 0, temp.Length);
+                            types[i] = Type.GetType(Encoding.UTF8.GetString(temp));
+                            arguments[i] = pop();
+                        }
+
+                        var method = Type.GetType(type).GetMethod(voidname, types);
+
+                        var rez = method.Invoke(null, arguments);
                         if (rez != typeof(void))
                         {
                             push(rez);
                         }
+
                         break;
                     }
-                    case 0x91:
+                    case 0x91: //Pop
                     {
                         pop();
                         break;
                     }
-                    case 0x93:
-                    {
+                    case 0x93: //Push Top stack object to Global Variables
+                        {
                         int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
                         Offset += 4;
                         GlobalVariables[index] = pop();
                         break;
                     }
-                    case 0x94:
-                    {
+                    case 0x94: // Load Global Variable to Stack
+                        {
                         int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
                         Offset += 4;
                         push(GlobalVariables[index]);
                         break;
                     }
+                    case 0x95: //Push Top stack object to Local Variables
+                        {
+                            int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
+                            Offset += 4;
+                            LocalVariables[index] = pop();
+                            break;
+                        }
+                    case 0x96: // Load Local Variable to Stack
+                        {
+                            int index = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
+                            Offset += 4;
+                            push(LocalVariables[index]);
+                            break;
+                        }
                     case 0x22:
                     {
                         return;
