@@ -608,6 +608,9 @@ namespace VMCompiler
                 richTextBox1.Select(match.Index + offset, 5);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#3498db");
 
+                richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
+
                 richTextBox1.Select(match.Groups[1].Index + match.Groups[1].Length + offset, 1);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#3498db");
             }
@@ -642,6 +645,20 @@ namespace VMCompiler
             {
                 richTextBox1.Select(match.Index + offset, 6);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#3498db");
+            }
+
+            Regex callcsharp = new Regex(@"([a-zA-Z0-9]{1,})\:(.*?)\((.*)\)");
+            MatchCollection callcsharpm = callcsharp.Matches(text);
+            foreach (Match match in callcsharpm)
+            {
+                richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#27ae60");
+
+                richTextBox1.Select(match.Groups[2].Index + offset, match.Groups[2].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#e67e22");
+
+                richTextBox1.Select(match.Groups[3].Index + offset, match.Groups[3].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#27ae60");
             }
         }
     }
