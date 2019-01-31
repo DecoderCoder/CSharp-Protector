@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -458,10 +459,10 @@ namespace VMCompiler
                                 for (int a = 0; a < vd.Arguments.Length; a++)
                                 {
                                     Array.Copy(BitConverter.GetBytes(vd.Arguments[a].Length), 0, CodeSection,
-                                        CodeSection.Length - vd.Length + 21 + a * 4, 4);
+                                        CodeSection.Length - vd.Length + 21 + a * 8, 4);
 
                                     Array.Copy(BitConverter.GetBytes(vd.Arguments[a].Start), 0, CodeSection,
-                                        CodeSection.Length - vd.Length + 25 + a * 4, 4);
+                                        CodeSection.Length - vd.Length + 25 + a * 8, 4);
                                 }
                             }
                                 break;
@@ -660,6 +661,16 @@ namespace VMCompiler
                 richTextBox1.Select(match.Groups[3].Index + offset, match.Groups[3].Length);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#27ae60");
             }
+        }
+
+        private void getTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new GetTypeName().Show();
+        }
+
+        private void getMethodsInTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new GetTypeMethods().Show();
         }
     }
 }

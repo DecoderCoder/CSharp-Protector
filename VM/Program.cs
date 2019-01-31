@@ -13,8 +13,11 @@ namespace VM
     {
         static void Main(string[] args)
         {
-            VirtualMachine vm = new VirtualMachine(File.ReadAllBytes("vmtest"));
-            //Console.WriteLine(String.Join("-", BitConverter.GetBytes((int)120).Select(x => x.ToString("x2"))));
+            VirtualMachine vm;
+            if (args.Length > 0)
+                vm = new VirtualMachine(File.ReadAllBytes(args[0]));
+            else
+                vm = new VirtualMachine(File.ReadAllBytes("vmtest"));
             vm.Run(0);
 
             Console.WriteLine("");
@@ -123,13 +126,14 @@ namespace VM
                         int argcount = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 16);
                         Type[] types = new Type[argcount];
                         object[] arguments = new object[argcount];
-                        for (int i = 0; i < argcount; i++)
+                        for (int i = argcount - 1; i > -1; i--)
                         {
-                            temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 20 + i * 4)];
+                            temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 20 + i * 8)];
+
                             Marshal.Copy(
                                 IntPtr.Add(MemoryPointer,
                                     CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer,
-                                        CodeSectionOffset + Offset + 24 + i * 4)), temp, 0, temp.Length);
+                                        CodeSectionOffset + Offset + 24 + i * 8)), temp, 0, temp.Length);
                             types[i] = Type.GetType(Encoding.UTF8.GetString(temp));
                             arguments[i] = pop();
                         }
