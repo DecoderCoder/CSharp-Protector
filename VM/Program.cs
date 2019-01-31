@@ -24,7 +24,6 @@ namespace VM
                 Console.WriteLine(s.ToString());
             }
             Console.WriteLine("---STACK END---");
-            Console.WriteLine(typeof(String).AssemblyQualifiedName);
             Console.ReadLine();
             
         }
@@ -139,11 +138,12 @@ namespace VM
                         var method = Type.GetType(type).GetMethod(voidname, types);
 
                         var rez = method.Invoke(null, arguments);
-                        if (rez != typeof(void))
+                        if (rez != null)
                         {
                             push(rez);
                         }
 
+                        Offset += 20 + argcount * 8;
                         break;
                     }
                     case 0x91: //Pop
