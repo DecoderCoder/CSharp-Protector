@@ -1,0 +1,22 @@
+using String=System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;
+using Console=System.Console, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;
+
+void Main
+{
+var int
+LdInt 0
+StLv int
+LdStr "Hello"
+LdStr " World"
+CallCSharp String:Concat(String,String)
+CallCSharp Console:WriteLine(String)
+LdLv int
+LdInt 1
+Add
+StLv int
+LdLv int
+LdInt 3
+Ceq
+BrFalse 9
+Ret
+}

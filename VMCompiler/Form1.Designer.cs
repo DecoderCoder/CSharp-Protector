@@ -32,10 +32,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.lineNumbers_For_RichTextBox1 = new LineNumbers.LineNumbers_For_RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.getTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getMethodsInTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lineNumbers_For_RichTextBox1 = new LineNumbers.LineNumbers_For_RichTextBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,6 +74,28 @@
             this.richTextBox1.Text = "";
             this.richTextBox1.WordWrap = false;
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.getTypeToolStripMenuItem,
+            this.getMethodsInTypeToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(255, 48);
+            // 
+            // getTypeToolStripMenuItem
+            // 
+            this.getTypeToolStripMenuItem.Name = "getTypeToolStripMenuItem";
+            this.getTypeToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.getTypeToolStripMenuItem.Text = "Get Type AssemblyQualifiedName";
+            this.getTypeToolStripMenuItem.Click += new System.EventHandler(this.getTypeToolStripMenuItem_Click);
+            // 
+            // getMethodsInTypeToolStripMenuItem
+            // 
+            this.getMethodsInTypeToolStripMenuItem.Name = "getMethodsInTypeToolStripMenuItem";
+            this.getMethodsInTypeToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.getMethodsInTypeToolStripMenuItem.Text = "Get Methods in Type";
+            this.getMethodsInTypeToolStripMenuItem.Click += new System.EventHandler(this.getMethodsInTypeToolStripMenuItem_Click);
             // 
             // lineNumbers_For_RichTextBox1
             // 
@@ -114,28 +136,6 @@
             this.lineNumbers_For_RichTextBox1.Size = new System.Drawing.Size(17, 583);
             this.lineNumbers_For_RichTextBox1.TabIndex = 4;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.getTypeToolStripMenuItem,
-            this.getMethodsInTypeToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(255, 70);
-            // 
-            // getTypeToolStripMenuItem
-            // 
-            this.getTypeToolStripMenuItem.Name = "getTypeToolStripMenuItem";
-            this.getTypeToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.getTypeToolStripMenuItem.Text = "Get Type AssemblyQualifiedName";
-            this.getTypeToolStripMenuItem.Click += new System.EventHandler(this.getTypeToolStripMenuItem_Click);
-            // 
-            // getMethodsInTypeToolStripMenuItem
-            // 
-            this.getMethodsInTypeToolStripMenuItem.Name = "getMethodsInTypeToolStripMenuItem";
-            this.getMethodsInTypeToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.getMethodsInTypeToolStripMenuItem.Text = "Get Methods in Type";
-            this.getMethodsInTypeToolStripMenuItem.Click += new System.EventHandler(this.getMethodsInTypeToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,7 +146,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "VMCompiler";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);

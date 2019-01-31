@@ -18,6 +18,7 @@ namespace VMCompiler
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox2.Clear();
             Type type = Type.GetType(textBox1.Text);
             foreach (var method in type.GetMethods())
             {
