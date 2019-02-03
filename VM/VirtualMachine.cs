@@ -79,6 +79,18 @@ namespace VM
                         Offset += 1;
                         break;
                     }
+                    case 0x54: //Newobj
+                    {
+                        byte[] temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 4)];
+                        Marshal.Copy(
+                            IntPtr.Add(MemoryPointer,
+                                CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer, Offset)), temp, 0,
+                            temp.Length);
+                        Type objType = Type.GetType(Encoding.UTF8.GetString(temp));
+                        Push(Activator.CreateInstance(objType));
+                        Offset += 8;
+                        break;
+                    }
                     case 0x70: //Newarr
                     {
                         int length = Pop();
@@ -171,8 +183,43 @@ namespace VM
                             Offset += 20 + argcount * 8;
                             break;
                         }
-                    case 0xA1: // Ceq
+                    case 0x42: //CallVirt C# Method
+                    {
+                        dynamic obj = Pop();
+                        Type type = obj.GetType();
+                        byte[] temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 4)];
+                        Marshal.Copy(
+                            IntPtr.Add(MemoryPointer,
+                                TextSectionOffset + Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset)), temp, 0, temp.Length);
+                        string voidname = Encoding.UTF8.GetString(temp);
+                        int argcount = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 8);
+                        Type[] types = new Type[argcount];
+                        dynamic[] arguments = new dynamic[argcount];
+                        for (int i = argcount - 1; i > -1; i--)
                         {
+                            temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 12 + i * 8)];
+
+                            Marshal.Copy(
+                                IntPtr.Add(MemoryPointer,
+                                    CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer,
+                                        CodeSectionOffset + Offset + 16 + i * 8)), temp, 0, temp.Length);
+                            types[i] = Type.GetType(Encoding.UTF8.GetString(temp));
+                            arguments[i] = Pop();
+                        }
+
+                        var method = type.GetMethod(voidname, types);
+
+                        var rez = method.Invoke(obj, arguments);
+                        if (rez != null)
+                        {
+                            Push(rez);
+                        }
+
+                        Offset += 12 + argcount * 8;
+                        break;
+                    }
+                    case 0xA1: // Ceq
+                    {
                             dynamic val2 = Pop();
                             dynamic val1 = Pop();
                             if (val1 == null || val2 == null)

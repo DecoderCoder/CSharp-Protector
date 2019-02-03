@@ -1,0 +1,17 @@
+using String=System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;
+using Console=System.Console, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;
+
+void Main
+{
+var arr
+LdInt 5
+Newarr String
+StLv arr
+LdLv arr
+LdInt 1
+LdStr "Hello"
+Setarr
+LdInt 1
+Getarr
+Ret
+}

@@ -131,6 +131,23 @@ namespace VMCompiler
                 richTextBox1.Select(match.Groups[3].Index + offset, match.Groups[3].Length);
                 richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
             }
+
+            Regex callvirtcsharp = new Regex(@"CallVirtCSharp (.*?)\((.*)\)");
+            foreach (Match match in callvirtcsharp.Matches(text))
+            {
+                richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#e67e22");
+
+                richTextBox1.Select(match.Groups[2].Index + offset, match.Groups[2].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
+            }
+
+            Regex arrorobj = new Regex(@"[Newarr|Newobj] (.*)");
+            foreach (Match match in arrorobj.Matches(text))
+            {
+                richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
+                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
+            }
         }
 
         private void getTypeToolStripMenuItem_Click(object sender, EventArgs e)

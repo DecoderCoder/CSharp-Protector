@@ -140,6 +140,17 @@ namespace VMCompiler
                                 CodeSection[CodeSection.Length - 1] = oper;
                             }
                                 break;
+                            case OpCode.Newobj:
+                            {
+                                UsingType oper = i.operand;
+                                Array.Resize(ref CodeSection, CodeSection.Length + 9);
+                                CodeSection[CodeSection.Length - 9] = 0x54;
+                                Array.Copy(BitConverter.GetBytes(oper.Start), 0, CodeSection,
+                                    CodeSection.Length - 8, 4);
+                                Array.Copy(BitConverter.GetBytes(oper.Length), 0, CodeSection,
+                                    CodeSection.Length - 4, 4);
+                            }
+                                break;
                             case OpCode.Newarr:
                             {
                                 UsingType oper = i.operand;
@@ -197,6 +208,33 @@ namespace VMCompiler
                                 Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
                                     CodeSection.Length - 4, 4);
                             }
+                                break;
+
+                            case OpCode.CallVirtCSharp:
+                                {
+                                    CSharpVoid vd = i.operand;
+                                    stringsContainer.Add(vd.Name);
+                                    Array.Resize(ref TextSection, TextSection.Length + vd.Name.Length);
+                                    Array.Copy(Encoding.UTF8.GetBytes(vd.Name), 0, TextSection,
+                                        TextSection.Length - vd.Name.Length, vd.Name.Length);
+
+                                    Array.Resize(ref CodeSection, CodeSection.Length + vd.Length);
+                                    CodeSection[CodeSection.Length - vd.Length] = 0x42;
+                                    Array.Copy(BitConverter.GetBytes(stringsContainer[vd.Name].Index), 0, CodeSection,
+                                        CodeSection.Length - vd.Length + 1, 4);
+                                    Array.Copy(BitConverter.GetBytes(stringsContainer[vd.Name].Length), 0, CodeSection,
+                                        CodeSection.Length - vd.Length + 5, 4);
+
+                                    Array.Copy(BitConverter.GetBytes(vd.Arguments.Length), 0, CodeSection,
+                                        CodeSection.Length - vd.Length + 9, 4);
+                                    for (int a = 0; a < vd.Arguments.Length; a++)
+                                    {
+                                        Array.Copy(BitConverter.GetBytes(vd.Arguments[a].Length), 0, CodeSection,
+                                            CodeSection.Length - vd.Length + 13 + a * 8, 4);
+                                        Array.Copy(BitConverter.GetBytes(vd.Arguments[a].Start), 0, CodeSection,
+                                            CodeSection.Length - vd.Length + 17 + a * 8, 4);
+                                    }
+                                }
                                 break;
                             case OpCode.CallCSharp:
                             {

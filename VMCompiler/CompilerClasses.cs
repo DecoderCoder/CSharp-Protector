@@ -53,7 +53,7 @@ namespace VMCompiler
         LdByte, //52  //Load Byte to Stack
         LdInt, //51  //Load Integer to Stack
         //LdLong, //53
-        //Newobj, //54
+        Newobj, //54
 
         //Arrays
         Newarr, //70
@@ -64,7 +64,7 @@ namespace VMCompiler
         // Voids
         Call, //40  //Call Void
         CallCSharp, //41 //CallCSharp Void
-        //CallVirtCSharp, //41 //CallCSharp Void
+        CallVirtCSharp, //42 //CallVirtCSharp Void
 
         // Compare
         Ceq, // A1 // ==              -> 1 | 0
@@ -167,6 +167,13 @@ namespace VMCompiler
                         Length += 5;
                     }
                         break;
+                    case OpCode.Newobj:
+                    {
+                        Instructions[Instructions.Length - 1] = new Instruction(op,
+                            Compiler.usingsContainer[str[i].Substring(str[i].IndexOf(" ") + 1)]) {Index = Length};
+                        Length += 9;
+                    }
+                        break;
                     case OpCode.Newarr:
                     {
                         Instructions[Instructions.Length - 1] = new Instruction(op,
@@ -191,6 +198,30 @@ namespace VMCompiler
                         Instructions[Instructions.Length - 1] =
                             new Instruction(op, str[i].Substring(str[i].IndexOf(" ") + 1)) {Index = Length};
                         Length += 5;
+                    }
+                        break;
+                    case OpCode.CallVirtCSharp:
+                    {
+                        string opstr = str[i].Substring(str[i].IndexOf(" ") + 1);
+                        CSharpVoid oper = new CSharpVoid();
+
+                        Regex vo = new Regex("([a-zA-Z0-9]{1,})\\((.*)\\)");
+                        Match voi = vo.Match(opstr);
+
+                        oper.Type = null;
+                        oper.Name = voi.Groups[1].Value;
+
+                        string[] args = voi.Groups[2].Value.Split(',');
+                        args = args.Where(x => x != "").ToArray();
+                        Array.Resize(ref oper.Arguments, args.Length);
+                        for (int a = 0; a < args.Length; a++)
+                        {
+                            oper.Arguments[a] = Compiler.usingsContainer[args[a]];
+                        }
+                        oper.Length = 13 + 8 * args.Length;
+                        Instructions[Instructions.Length - 1] =
+                            new Instruction(op, oper) { Index = Length };
+                        Length += 13 + 8 * args.Length;
                     }
                         break;
                     case OpCode.CallCSharp:
