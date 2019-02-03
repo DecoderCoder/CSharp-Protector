@@ -8,14 +8,14 @@ namespace VM
 {
     internal unsafe class VirtualMachine
     {
-        public object[] Stack = new object[0];
+        public dynamic[] Stack = new dynamic[0];
         public IntPtr MemoryPointer { get; set; }
         public int ImageSize { get; set; }
         public int CodeSectionOffset { get; set; }
         public int TextSectionOffset { get; set; }
         public int CSharpTypesSectionOffset { get; set; }
         public int ClearSectionOffset { get; set; }
-        public object[] GlobalVariables = new object[512];
+        public dynamic[] GlobalVariables = new dynamic[512];
 
         public VirtualMachine(byte[] b)
         {
@@ -30,18 +30,18 @@ namespace VM
             MemoryPointer = IntPtr.Add(MemoryPointer, 24);
         }
 
-        private object Pop()
+        private dynamic Pop()
         {
             if (Stack.Length > 0)
             {
-                object rez = Stack[Stack.Length - 1];
+                dynamic rez = Stack[Stack.Length - 1];
                 Array.Resize(ref Stack, Stack.Length - 1);
                 return rez;
             }
             return null;
         }
 
-        public void Push(object val)
+        public void Push(dynamic val)
         {
             Array.Resize(ref Stack, Stack.Length + 1);
             Stack[Stack.Length - 1] = val;
@@ -49,7 +49,7 @@ namespace VM
 
         public void Run(int Offset)
         {
-            object[] LocalVariables = new object[512];
+            dynamic[] LocalVariables = new dynamic[512];
             while (true)
             {
                 byte curByte = Marshal.ReadByte(IntPtr.Add(MemoryPointer, CodeSectionOffset + Offset++));
@@ -74,11 +74,40 @@ namespace VM
                             break;
                         }
                     case 0x52: //LdByte
-                        {
-                            Push(Marshal.ReadByte(MemoryPointer, CodeSectionOffset + Offset));
-                            Offset += 1;
-                            break;
-                        }
+                    {
+                        Push(Marshal.ReadByte(MemoryPointer, CodeSectionOffset + Offset));
+                        Offset += 1;
+                        break;
+                    }
+                    case 0x70: //Newarr
+                    {
+                        int length = Pop();
+                        byte[] temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 4)];
+                        Marshal.Copy(
+                            IntPtr.Add(MemoryPointer,
+                                CSharpTypesSectionOffset + Marshal.ReadInt32(MemoryPointer, Offset)), temp, 0,
+                            temp.Length);
+                        Type arrType = Type.GetType(Encoding.UTF8.GetString(temp)).MakeArrayType();
+                        Push(Activator.CreateInstance(arrType, length));
+                        Offset += 8;
+                        break;
+                    }
+                    case 0x71: //Setarr
+                    {
+                        dynamic value = Pop();
+                        dynamic index = Pop();
+                        dynamic arr = Pop();
+                        arr[index] = value;
+                        Push(arr);
+                        break;
+                    }
+                    case 0x72: //Getarr
+                    {
+                        dynamic index = Pop();
+                        dynamic arr = Pop();
+                        Push(arr[index]);
+                        break;
+                    }
                     case 0x60: // Br
                         {
                             Offset = CodeSectionOffset + Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset);
@@ -118,7 +147,7 @@ namespace VM
                             string voidname = Encoding.UTF8.GetString(temp);
                             int argcount = Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 16);
                             Type[] types = new Type[argcount];
-                            object[] arguments = new object[argcount];
+                            dynamic[] arguments = new dynamic[argcount];
                             for (int i = argcount - 1; i > -1; i--)
                             {
                                 temp = new byte[Marshal.ReadInt32(MemoryPointer, CodeSectionOffset + Offset + 20 + i * 8)];

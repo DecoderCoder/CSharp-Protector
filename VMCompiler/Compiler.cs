@@ -134,14 +134,35 @@ namespace VMCompiler
                                 break;
                             case OpCode.LdByte:
                             {
-                                int oper = i.operand;
+                                byte oper = i.operand;
                                 Array.Resize(ref CodeSection, CodeSection.Length + 2);
                                 CodeSection[CodeSection.Length - 2] = 0x52;
-                                Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
-                                    CodeSection.Length - 1, 1);
+                                CodeSection[CodeSection.Length - 1] = oper;
                             }
                                 break;
-
+                            case OpCode.Newarr:
+                            {
+                                UsingType oper = i.operand;
+                                Array.Resize(ref CodeSection, CodeSection.Length + 9);
+                                CodeSection[CodeSection.Length - 9] = 0x70;
+                                Array.Copy(BitConverter.GetBytes(oper.Start), 0, CodeSection,
+                                    CodeSection.Length - 8, 4);
+                                Array.Copy(BitConverter.GetBytes(oper.Length), 0, CodeSection,
+                                    CodeSection.Length - 4, 4);
+                            }
+                                break;
+                            case OpCode.Setarr:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0x71;
+                            }
+                                break;
+                            case OpCode.Getarr:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0x72;
+                            }
+                                break;
                             case OpCode.Br:
                             {
                                 Array.Resize(ref CodeSection, CodeSection.Length + 5);
@@ -302,6 +323,12 @@ namespace VMCompiler
                                 CodeSection[CodeSection.Length - 5] = 0x96;
                                 Array.Copy(BitConverter.GetBytes(oper), 0, CodeSection,
                                     CodeSection.Length - 4, 4);
+                            }
+                                break;
+                            case OpCode.Nop:
+                            {
+                                Array.Resize(ref CodeSection, CodeSection.Length + 1);
+                                CodeSection[CodeSection.Length - 1] = 0x90;
                             }
                                 break;
                             case OpCode.Ret:

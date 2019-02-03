@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace VMCompiler
 {
@@ -49,12 +50,21 @@ namespace VMCompiler
     {
         // Types
         LdStr, //50  //Load String to Stack
-        LdInt, //51  //Load Integer to Stack
         LdByte, //52  //Load Byte to Stack
+        LdInt, //51  //Load Integer to Stack
+        //LdLong, //53
+        //Newobj, //54
+
+        //Arrays
+        Newarr, //70
+        Setarr, //71
+        Getarr, //72
+
 
         // Voids
         Call, //40  //Call Void
         CallCSharp, //41 //CallCSharp Void
+        //CallVirtCSharp, //41 //CallCSharp Void
 
         // Compare
         Ceq, // A1 // ==              -> 1 | 0
@@ -157,6 +167,25 @@ namespace VMCompiler
                         Length += 5;
                     }
                         break;
+                    case OpCode.Newarr:
+                    {
+                        Instructions[Instructions.Length - 1] = new Instruction(op,
+                            Compiler.usingsContainer[str[i].Substring(str[i].IndexOf(" ") + 1)]) {Index = Length};
+                        Length += 9;
+                    }
+                        break;
+                    case OpCode.Setarr:
+                    {
+                        Instructions[Instructions.Length - 1] = new Instruction(op, null) {Index = Length};
+                        Length += 1;
+                    }
+                        break;
+                    case OpCode.Getarr:
+                    {
+                        Instructions[Instructions.Length - 1] = new Instruction(op, null) {Index = Length};
+                        Length += 1;
+                    }
+                        break;
                     case OpCode.Call:
                     {
                         Instructions[Instructions.Length - 1] =
@@ -176,6 +205,7 @@ namespace VMCompiler
                         oper.Name = voi.Groups[2].Value;
 
                         string[] args = voi.Groups[3].Value.Split(',');
+                        args = args.Where(x => x != "").ToArray();
                         Array.Resize(ref oper.Arguments, args.Length);
                         for (int a = 0; a < args.Length; a++)
                         {
