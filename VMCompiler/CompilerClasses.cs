@@ -9,9 +9,9 @@ namespace VMCompiler
 {
     internal class StringType
     {
-        public string String = "";
-        public int Index = 0;
-        public int Length = 0;
+        public string String;
+        public int Index;
+        public int Length;
 
         public StringType(string str, int index, int length)
         {
@@ -23,7 +23,7 @@ namespace VMCompiler
 
     internal class StringsContainer
     {
-        private int wholelength = 0;
+        private int wholelength;
 
         private StringType[] strings = new StringType[0];
 

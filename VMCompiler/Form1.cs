@@ -146,7 +146,7 @@ namespace VMCompiler
             foreach (Match match in arrorobj.Matches(text))
             {
                 richTextBox1.Select(match.Groups[1].Index + offset, match.Groups[1].Length);
-                richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
+            //    richTextBox1.SelectionColor = ColorTranslator.FromHtml("#2ecc71");
             }
         }
 

@@ -30,14 +30,13 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.outputTextBox = new System.Windows.Forms.TextBox();
+            this.protectButton = new System.Windows.Forms.Button();
+            this.addAssemblyButton = new System.Windows.Forms.Button();
+            this.selectAssemblyButton = new System.Windows.Forms.Button();
+            this.assemblyPathTextBox = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.methodEncryptionCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -55,10 +54,11 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button2);
-            this.tabPage1.Controls.Add(this.button1);
-            this.tabPage1.Controls.Add(this.textBox1);
-            this.tabPage1.Controls.Add(this.listBox1);
+            this.tabPage1.Controls.Add(this.outputTextBox);
+            this.tabPage1.Controls.Add(this.protectButton);
+            this.tabPage1.Controls.Add(this.addAssemblyButton);
+            this.tabPage1.Controls.Add(this.selectAssemblyButton);
+            this.tabPage1.Controls.Add(this.assemblyPathTextBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -67,44 +67,59 @@
             this.tabPage1.Text = "Assemblies";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // outputTextBox
             // 
-            this.button2.Location = new System.Drawing.Point(6, 33);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(653, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Add assembly";
-            this.button2.UseVisualStyleBackColor = true;
+            this.outputTextBox.Location = new System.Drawing.Point(6, 62);
+            this.outputTextBox.Multiline = true;
+            this.outputTextBox.Name = "outputTextBox";
+            this.outputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.outputTextBox.Size = new System.Drawing.Size(653, 469);
+            this.outputTextBox.TabIndex = 3;
+            this.outputTextBox.WordWrap = false;
             // 
-            // button1
+            // protectButton
             // 
-            this.button1.Location = new System.Drawing.Point(621, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(38, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
+            this.protectButton.Enabled = false;
+            this.protectButton.Location = new System.Drawing.Point(6, 537);
+            this.protectButton.Name = "protectButton";
+            this.protectButton.Size = new System.Drawing.Size(653, 23);
+            this.protectButton.TabIndex = 2;
+            this.protectButton.Text = "Protect";
+            this.protectButton.UseVisualStyleBackColor = true;
+            this.protectButton.Click += new System.EventHandler(this.protectButton_Click);
             // 
-            // textBox1
+            // addAssemblyButton
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 8);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(609, 20);
-            this.textBox1.TabIndex = 1;
+            this.addAssemblyButton.Enabled = false;
+            this.addAssemblyButton.Location = new System.Drawing.Point(6, 33);
+            this.addAssemblyButton.Name = "addAssemblyButton";
+            this.addAssemblyButton.Size = new System.Drawing.Size(653, 23);
+            this.addAssemblyButton.TabIndex = 2;
+            this.addAssemblyButton.Text = "Open assembly";
+            this.addAssemblyButton.UseVisualStyleBackColor = true;
+            this.addAssemblyButton.Click += new System.EventHandler(this.addAssemblyButton_Click);
             // 
-            // listBox1
+            // selectAssemblyButton
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 62);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(653, 498);
-            this.listBox1.TabIndex = 0;
+            this.selectAssemblyButton.Location = new System.Drawing.Point(621, 6);
+            this.selectAssemblyButton.Name = "selectAssemblyButton";
+            this.selectAssemblyButton.Size = new System.Drawing.Size(38, 23);
+            this.selectAssemblyButton.TabIndex = 2;
+            this.selectAssemblyButton.Text = "...";
+            this.selectAssemblyButton.UseVisualStyleBackColor = true;
+            this.selectAssemblyButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // assemblyPathTextBox
+            // 
+            this.assemblyPathTextBox.Location = new System.Drawing.Point(6, 8);
+            this.assemblyPathTextBox.Name = "assemblyPathTextBox";
+            this.assemblyPathTextBox.Size = new System.Drawing.Size(609, 20);
+            this.assemblyPathTextBox.TabIndex = 1;
+            this.assemblyPathTextBox.TextChanged += new System.EventHandler(this.assemblyPathTextBox_TextChanged);
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.button4);
-            this.tabPage2.Controls.Add(this.button3);
-            this.tabPage2.Controls.Add(this.checkBox1);
+            this.tabPage2.Controls.Add(this.methodEncryptionCheckBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -113,35 +128,15 @@
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // methodEncryptionCheckBox
             // 
-            this.button4.Location = new System.Drawing.Point(277, 288);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(91, 23);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "MessageBox";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(277, 238);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(91, 23);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "XOR";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 6);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(83, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Obfuscation";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.methodEncryptionCheckBox.AutoSize = true;
+            this.methodEncryptionCheckBox.Location = new System.Drawing.Point(6, 6);
+            this.methodEncryptionCheckBox.Name = "methodEncryptionCheckBox";
+            this.methodEncryptionCheckBox.Size = new System.Drawing.Size(115, 17);
+            this.methodEncryptionCheckBox.TabIndex = 0;
+            this.methodEncryptionCheckBox.Text = "Method Encryption";
+            this.methodEncryptionCheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -167,14 +162,13 @@
 
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button addAssemblyButton;
+        private System.Windows.Forms.Button selectAssemblyButton;
+        private System.Windows.Forms.TextBox assemblyPathTextBox;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button protectButton;
+        private System.Windows.Forms.CheckBox methodEncryptionCheckBox;
+        private System.Windows.Forms.TextBox outputTextBox;
     }
 }
 
