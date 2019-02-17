@@ -96,13 +96,20 @@ void AntiDebugThread(void *param) {
 			eraseCode();
 			TerminateProcess(GetCurrentProcess(), 0);
 		}
-		// CheckRemoteDebuggerPresent
-		PBOOL crdp = FALSE;
-		CheckRemoteDebuggerPresent(GetCurrentProcess(), crdp);
-		if (crdp) {
+		BOOL crdp = FALSE;
+		if (CheckRemoteDebuggerPresent(GetCurrentProcess(), &crdp))
+		{
+			if (crdp) {
+				eraseCode();
+				TerminateProcess(GetCurrentProcess(), 0);
+			}			
+		}
+		else {
 			eraseCode();
 			TerminateProcess(GetCurrentProcess(), 0);
 		}
+
+
 
 		if (GetCurrentProcess() == 0) {
 			eraseCode();
@@ -117,7 +124,7 @@ extern "C" __declspec(dllexport) bool _stdcall Protect() {//void(__stdcall *anti
 	HANDLE curProc = GetCurrentProcess();
 	DWORD old;
 
-#if (AntiDebugNativeDef == 1)
+#if (AntiDebugManagedDef == 1)
 	FILETIME createTime;
 	FILETIME exitTime;
 	FILETIME kernelTime;
