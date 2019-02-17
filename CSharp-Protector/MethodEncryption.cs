@@ -116,6 +116,8 @@ namespace CSharp_Protector
             return -1;
         }
 
+        public static byte[] Code2Array = new byte[0];
+
         private void EncryptSection(ModuleWriterBase writer)
         {
             Globals.Log("Encrypting section... ", false);
@@ -162,31 +164,39 @@ namespace CSharp_Protector
             }
 
             stream.Position = offset;
-            for (var i = 0; i < encrypted.Length; i++)
+
+            int code1 = encrypted.Length / 2;
+            int code2 = encrypted.Length - code1;
+
+            for (var i = 0; i < code1; i++)
             {
                 bwriter.Write(encrypted[i]);
             }
 
-            stream.Position = 0;
-            //byte[] dump = new byte[stream.Length];
-            //byte[] inttoreplace = new byte[] { 0x64, 0x03, 0x00, 0x00 };
-            //for (int i = 0; i < dump.Length; i++)
-            //{
-            //    dump[i] = reader.ReadByte();
-            //}
-            //int replaceoffset = IndexInArray(dump, inttoreplace) + 0;
-            //stream.Position = replaceoffset;
-            //bwriter.Write(BitConverter.GetBytes((uint)slength));
+            byte[] randomBytes = new byte[code2];
+            random.NextBytes(randomBytes);
+
+            for (var i = code1; i < encrypted.Length; i++)
+            {
+                bwriter.Write(randomBytes[i - code1]);
+            }
+
+            Code2Array = new byte[code2];
+
+            Array.Copy(encrypted, code1, Code2Array, 0, code2 - 1);
 
             Globals.Log("OK");
             Globals.Log("Section length: " + encrypted.Length);
+            Globals.Log("Code 1 length: " + code1);
+            Globals.Log("Code 2 length: " + code2);
             Globals.Log();
 
             Globals.Log("AES Mode: " + aesmode);
             Globals.Log("AES Key size: " + aeskeysize);
             Globals.Log("AES IV: 0x" + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))));
-            
             Globals.Log("AES Key: 0x" + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))));
+            Globals.Log("Code 2: 0x" + String.Join(",0x", Code2Array.Select(x => x.ToString("x2"))));
+
 
             //Globals.Log("Random byte: " + randomByte[0].ToString("x2").ToUpper());
         }
