@@ -37,6 +37,9 @@
             this.assemblyPathTextBox = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.methodEncryptionCheckBox = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -119,6 +122,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.checkBox2);
+            this.tabPage2.Controls.Add(this.checkBox1);
             this.tabPage2.Controls.Add(this.methodEncryptionCheckBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -131,12 +137,41 @@
             // methodEncryptionCheckBox
             // 
             this.methodEncryptionCheckBox.AutoSize = true;
-            this.methodEncryptionCheckBox.Location = new System.Drawing.Point(6, 6);
+            this.methodEncryptionCheckBox.Location = new System.Drawing.Point(6, 19);
             this.methodEncryptionCheckBox.Name = "methodEncryptionCheckBox";
             this.methodEncryptionCheckBox.Size = new System.Drawing.Size(115, 17);
             this.methodEncryptionCheckBox.TabIndex = 0;
             this.methodEncryptionCheckBox.Text = "Method Encryption";
             this.methodEncryptionCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(6, 42);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(73, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Anti dump";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Native methods";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(6, 65);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(94, 17);
+            this.checkBox2.TabIndex = 0;
+            this.checkBox2.Text = "CRC32 Check";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -169,6 +204,9 @@
         private System.Windows.Forms.Button protectButton;
         private System.Windows.Forms.CheckBox methodEncryptionCheckBox;
         private System.Windows.Forms.TextBox outputTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 

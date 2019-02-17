@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using dnlib.DotNet;
 using dnlib.DotNet.Writer;
@@ -13,7 +14,7 @@ namespace CSharp_Protector
     {
         MethodEncoding
     }
-
+    
     class Protector
     {
         public void Protect(ProtectFlag flags)
@@ -58,8 +59,18 @@ namespace CSharp_Protector
             Directory.CreateDirectory(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\");
             Globals.Assembly.Write(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\" + Path.GetFileName(Globals.AssemblyPath), opts);
 
+            byte[] asm = File.ReadAllBytes(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\" +
+                                           Path.GetFileName(Globals.AssemblyPath));
+
+            Globals.Log();
+            Globals.Log("CRC32: " + Crc32.Get(asm));
+            Globals.Log();
+            Globals.Log("Assembly size: " + asm.Length);
             Globals.Log();
             Globals.Log("Protect complete");
+
+            File.WriteAllText(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\" +
+                              Path.GetFileNameWithoutExtension(Globals.AssemblyPath) + "_log.txt", Globals.GetLog());
         }
     }
 }

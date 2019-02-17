@@ -37,20 +37,26 @@ namespace CSharp_Protector
             _output = output;
         }
 
+        public static string GetLog()
+        {
+            return _output.Text;
+        }
+
         public static void LogClear()
         {
             _output.Invoke(new Action(() => _output.Text = String.Empty ));
         }
 
-        public static void Log(string text = default(string), bool endl = true, bool replace = false)
+        public static void Log(object text = default(object), bool endl = true, bool replace = false)
         {
             _output.Invoke(new Action(() =>
             {
                 if (replace)
-                    _output.Text = text;
+                    _output.Text = text.ToString();
                 else
                     _output.Text += text + (endl ? "\r\n" : String.Empty);
             }));
+            Application.DoEvents();
         }
     }
 }

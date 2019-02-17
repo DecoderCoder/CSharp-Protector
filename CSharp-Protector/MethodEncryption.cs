@@ -135,6 +135,9 @@ namespace CSharp_Protector
 
             byte[] encrypted;
 
+            string aesmode = String.Empty;
+            string aeskeysize = String.Empty;
+
             using (Rijndael rijAlg = Rijndael.Create())
             {
                 rijAlg.KeySize = 256;
@@ -143,6 +146,8 @@ namespace CSharp_Protector
 
                 ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
                 rijAlg.Mode = CipherMode.CBC;
+                aesmode = rijAlg.Mode.ToString();
+                aeskeysize = rijAlg.KeySize.ToString();
                 using (MemoryStream msEncrypt = new MemoryStream())
                 {
                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
@@ -177,10 +182,11 @@ namespace CSharp_Protector
             Globals.Log("Section length: " + encrypted.Length);
             Globals.Log();
 
-            Globals.Log("AES Mode: CBC");
-            Globals.Log("AES IV: " + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))).ToUpper());
-            Globals.Log("AES Key size: 256");
-            Globals.Log("AES Key: " + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))).ToUpper());
+            Globals.Log("AES Mode: " + aesmode);
+            Globals.Log("AES Key size: " + aeskeysize);
+            Globals.Log("AES IV: 0x" + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))));
+            
+            Globals.Log("AES Key: 0x" + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))));
 
             //Globals.Log("Random byte: " + randomByte[0].ToString("x2").ToUpper());
         }

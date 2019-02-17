@@ -21,7 +21,7 @@ namespace CSharp_Protector
         {
             InitializeComponent();
             Globals.SetOutput(ref outputTextBox);
-            Methods.Initialize();
+            //Methods.Initialize();
         }
 
         private void Log(string text = default(string))
@@ -48,13 +48,6 @@ namespace CSharp_Protector
         private void assemblyPathTextBox_TextChanged(object sender, EventArgs e)
         {
             addAssemblyButton.Enabled = File.Exists(assemblyPathTextBox.Text);
-        }
-
-        private delegate void helloWorldProc();
-
-        private void HelloWorld()
-        {
-            MessageBox.Show("Hello world!");
         }
 
         private void addAssemblyButton_Click(object sender, EventArgs e)
