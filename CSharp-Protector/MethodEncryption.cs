@@ -196,12 +196,19 @@ namespace CSharp_Protector
             ModuleDefMD module = ModuleDefMD.Load(typeof(Methods).Module);
             TypeDef type = module.ResolveTypeDef(MDToken.ToRID(typeof(Methods).MetadataToken));
             IEnumerable<IDnlibDef> members = InjectHelper.Inject(type, module.GlobalType, module);
-            MethodDef ProtectMethod = (MethodDef) members.Single(method => method.Name == "Protect64");
-            ProtectMethod.DeclaringType = null;
-            typeDef.Methods.Add(ProtectMethod);
+            MethodDef Protect64Method = (MethodDef) members.Single(method => method.Name == "Protect64");
+            //MethodDef Protect32Method = (MethodDef)members.Single(method => method.Name == "Protect64");
+
+            //Protect32Method.DeclaringType = null;
+            //typeDef.Methods.Add(Protect32Method);
+
+            Protect64Method.DeclaringType = null;
+            typeDef.Methods.Add(Protect64Method);
             if (methodDef.Body == null)
                 methodDef.Body = new CilBody();
-            methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, ProtectMethod));
+            //methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, Protect32Method));
+            methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, Protect64Method)); 
+            
            // methodDef.Body.Instructions.Insert(1, Instruction.Create(OpCodes.Ret));
         }
     }

@@ -11,8 +11,11 @@ namespace CSharp_Protector
 {
     public static class Methods
     {
-        [DllImport("Dll1.dll", EntryPoint = "Protect64")]
+        [DllImport("Protect64.dll", EntryPoint = "Protect")]
         public static extern void Protect64();
+
+        [DllImport("Protect32.dll", EntryPoint = "Protect")]
+        public static extern void Protect32();
 
         [DllImport("kernel32.dll")]
         static extern unsafe bool VirtualProtect(byte* lpAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);

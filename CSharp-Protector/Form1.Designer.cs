@@ -40,9 +40,13 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -122,8 +126,11 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.numericUpDown1);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.checkBox2);
+            this.tabPage2.Controls.Add(this.checkBox4);
+            this.tabPage2.Controls.Add(this.checkBox3);
             this.tabPage2.Controls.Add(this.checkBox1);
             this.tabPage2.Controls.Add(this.methodEncryptionCheckBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -166,12 +173,49 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(6, 65);
+            this.checkBox2.Location = new System.Drawing.Point(6, 111);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(94, 17);
             this.checkBox2.TabIndex = 0;
             this.checkBox2.Text = "CRC32 Check";
             this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(6, 65);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(109, 17);
+            this.checkBox3.TabIndex = 0;
+            this.checkBox3.Text = "Anti native debug";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(6, 88);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(124, 17);
+            this.checkBox4.TabIndex = 0;
+            this.checkBox4.Text = "Anti managed debug";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(136, 87);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(105, 20);
+            this.numericUpDown1.TabIndex = 2;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
@@ -189,6 +233,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -207,6 +252,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 
