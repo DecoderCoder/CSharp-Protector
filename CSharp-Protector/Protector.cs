@@ -10,15 +10,21 @@ using dnlib.DotNet.Writer;
 namespace CSharp_Protector
 {
     [Flags]
-    enum ProtectFlag
+    public enum ProtectFlag
     {
-        MethodEncoding
+        None, AntiDebugNativeDef, AntiDebugManagedDef, AntiDumpDef, MethodEncryptionDef, CRC32CheckDef
     }
     
-    class Protector
+    public class Protector
     {
-        public void Protect(ProtectFlag flags)
+        // TRUE - x64 | FALSE - x32
+        public bool Platform = true;
+        public long AntiDebugManagedDelay = 1000000; // 1000000 = 100ms, Delay / 10000 = Miliseconds
+
+        public void Protect(ProtectFlag flags, bool platform = true, long admdelay = 1000000)
         {
+            Platform = platform;
+            AntiDebugManagedDelay = admdelay;
             Globals.Log("Protect: " + flags.ToString());
             Globals.Log();
             ProtectThread(flags);
@@ -49,13 +55,19 @@ namespace CSharp_Protector
 
             MethodsToProtect.Remove(Globals.Assembly.Modules[0].EntryPoint);
 
-            if (protect.HasFlag(ProtectFlag.MethodEncoding))
+            Globals.Log("#define AntiDebugNativeDef " + (protect.HasFlag(ProtectFlag.AntiDebugNativeDef) ? "1" : "0"));
+            Globals.Log("#define AntiDebugManagedDef " + (protect.HasFlag(ProtectFlag.AntiDebugManagedDef) ? "1" : "0"));
+            Globals.Log("#define AntiDumpDef " + (protect.HasFlag(ProtectFlag.AntiDumpDef) ? "1" : "0"));
+            Globals.Log("#define MethodEncryptionDef " + (protect.HasFlag(ProtectFlag.MethodEncryptionDef) ? "1" : "0"));
+            Globals.Log("#define CRC32CheckDef " + (protect.HasFlag(ProtectFlag.CRC32CheckDef) ? "1" : "0"));
+
+            if (protect.HasFlag(ProtectFlag.MethodEncryptionDef))
             {
-                MethodEncryption.AddVoids(EntryType, Globals.Assembly.Modules[0].EntryPoint);
+                MethodEncryption.AddVoids(this, EntryType, Globals.Assembly.Modules[0].EntryPoint);
                 opts.Listener = new MethodEncryption() { methods = MethodsToProtect };
             }
-            
-            
+
+
             Directory.CreateDirectory(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\");
             Globals.Assembly.Write(Path.GetDirectoryName(Globals.AssemblyPath) + "\\Protected\\" + Path.GetFileName(Globals.AssemblyPath), opts);
 
@@ -63,9 +75,10 @@ namespace CSharp_Protector
                                            Path.GetFileName(Globals.AssemblyPath));
 
             Globals.Log();
-            Globals.Log("CRC32: " + Crc32.Get(asm));
+            Globals.Log("#define CRC32 " + Crc32.Get(asm));
+            Globals.Log("#define AssemblySize " + asm.Length);
             Globals.Log();
-            Globals.Log("Assembly size: " + asm.Length);
+            Globals.Log("#define AntiDebugManagedDelay " + AntiDebugManagedDelay);
             Globals.Log();
             Globals.Log("Protect complete");
 

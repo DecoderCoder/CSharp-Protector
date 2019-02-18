@@ -55,7 +55,7 @@ namespace CSharp_Protector
 
         private void CreateSections(ModuleWriterBase writer)
         {
-            Globals.Log("Creating sections... ", false);
+            //Globals.Log("Creating sections... ", false);
 
             var nameBuffer = new byte[8];
 
@@ -88,9 +88,8 @@ namespace CSharp_Protector
                 var ok = writer.MethodBodies.Remove(body); // <<< Need FIX
                 encryptedChunk.Add(body);
             }
-
             newSection.Add(new ByteArrayChunk(new byte[4]), 4);
-            Globals.Log("OK");
+            //Globals.Log("OK");
         }
 
         public static int IndexInArray(byte[] arrayToSearchThrough, byte[] patternToFind)
@@ -120,7 +119,7 @@ namespace CSharp_Protector
 
         private void EncryptSection(ModuleWriterBase writer)
         {
-            Globals.Log("Encrypting section... ", false);
+            //Globals.Log("Encrypting section... ", false);
             Stream stream = writer.DestinationStream;
             uint offset = (uint)writer.Sections[0].FileOffset;
             uint slength = writer.Sections[0].GetFileLength();
@@ -173,48 +172,65 @@ namespace CSharp_Protector
                 bwriter.Write(encrypted[i]);
             }
 
+            byte[] randomBytes = new byte[code2];
+            random.NextBytes(randomBytes);
+
             for (var i = code1; i < encrypted.Length; i++)
             {
-                bwriter.Write(0x0);
+                bwriter.Write(randomBytes[i - code1]);
             }
 
             Code2Array = new byte[code2];
 
             Array.Copy(encrypted, code1, Code2Array, 0, code2 - 1);
 
-            Globals.Log("OK");
-            Globals.Log("Section length: " + encrypted.Length);
-            Globals.Log("Code 1 length: " + code1);
-            Globals.Log("Code 2 length: " + code2);
-            Globals.Log();
+            //Globals.Log("OK");
 
-            Globals.Log("AES Mode: " + aesmode);
-            Globals.Log("AES Key size: " + aeskeysize);
-            Globals.Log("AES IV: 0x" + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))));
-            Globals.Log("AES Key: 0x" + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))));
-            Globals.Log("Code 2: 0x" + String.Join(",0x", Code2Array.Select(x => x.ToString("x2"))));
+            Globals.Log("const uint8_t iv[] = { 0x" + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))) + " };");
+            Globals.Log("const uint8_t key[] = { 0x" + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))) + " };");
+            Globals.Log("const uint8_t Code2[] = { 0x" + String.Join(",0x", Code2Array.Select(x => x.ToString("x2"))) + " };");
+
+            Globals.Log("#define CodeLength1 " + code1);
+            Globals.Log("#define CodeLength2 " + code2);
+            Globals.Log("#define MethodEncryptionRVA " + writer.Sections[0].RVA);
+
+            //Globals.Log("Section length: " + encrypted.Length);
+            //Globals.Log("Code 1 length: " + code1);
+            //Globals.Log("Code 2 length: " + code2);
+            //Globals.Log();
+
+            //Globals.Log("AES Mode: " + aesmode);
+            //Globals.Log("AES Key size: " + aeskeysize);
+            //Globals.Log("AES IV: 0x" + String.Join(",0x", AESIV.Select(x => x.ToString("x2"))));
+            //Globals.Log("AES Key: 0x" + String.Join(",0x", AESKey.Select(x => x.ToString("x2"))));
+            //Globals.Log("Code 2: 0x" + String.Join(",0x", Code2Array.Select(x => x.ToString("x2"))));
+
 
 
             //Globals.Log("Random byte: " + randomByte[0].ToString("x2").ToUpper());
         }
 
-        public static void AddVoids(TypeDef typeDef, MethodDef methodDef)
+        public static void AddVoids(Protector protectorClass,TypeDef typeDef, MethodDef methodDef)
         {
             ModuleDefMD module = ModuleDefMD.Load(typeof(Methods).Module);
             TypeDef type = module.ResolveTypeDef(MDToken.ToRID(typeof(Methods).MetadataToken));
             IEnumerable<IDnlibDef> members = InjectHelper.Inject(type, module.GlobalType, module);
-            MethodDef Protect64Method = (MethodDef) members.Single(method => method.Name == "Protect64");
-            //MethodDef Protect32Method = (MethodDef)members.Single(method => method.Name == "Protect64");
+            MethodDef ProtectMethod;
+            if (protectorClass.Platform)
+            {
+                ProtectMethod = (MethodDef)members.Single(method => method.Name == "Protect64");
+            }
+            else
+            {
+                ProtectMethod = (MethodDef)members.Single(method => method.Name == "Protect32");
+            }
 
-            //Protect32Method.DeclaringType = null;
-            //typeDef.Methods.Add(Protect32Method);
+            ProtectMethod.DeclaringType = null;
+            typeDef.Methods.Add(ProtectMethod);
 
-            Protect64Method.DeclaringType = null;
-            typeDef.Methods.Add(Protect64Method);
             if (methodDef.Body == null)
                 methodDef.Body = new CilBody();
-            //methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, Protect32Method));
-            methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, Protect64Method)); 
+            methodDef.Body.Instructions.Insert(0, Instruction.Create(OpCodes.Call, ProtectMethod)); 
             
            // methodDef.Body.Instructions.Insert(1, Instruction.Create(OpCodes.Ret));
         }

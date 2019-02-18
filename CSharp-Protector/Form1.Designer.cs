@@ -36,19 +36,21 @@
             this.selectAssemblyButton = new System.Windows.Forms.Button();
             this.assemblyPathTextBox = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.methodEncryptionCheckBox = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.AntiManagedDebugNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.CRC32CheckBox = new System.Windows.Forms.CheckBox();
+            this.antiManagedDebugCheckBox = new System.Windows.Forms.CheckBox();
+            this.antiDebugNativeCheckBox = new System.Windows.Forms.CheckBox();
+            this.antiDumpCheckBox = new System.Windows.Forms.CheckBox();
+            this.methodEncryptionCheckBox = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.x64CheckBox = new System.Windows.Forms.RadioButton();
+            this.x32CheckBox = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -128,14 +130,13 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.radioButton2);
-            this.tabPage2.Controls.Add(this.radioButton1);
-            this.tabPage2.Controls.Add(this.numericUpDown1);
+            this.tabPage2.Controls.Add(this.panel1);
+            this.tabPage2.Controls.Add(this.AntiManagedDebugNumericUpDown);
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.checkBox2);
-            this.tabPage2.Controls.Add(this.checkBox4);
-            this.tabPage2.Controls.Add(this.checkBox3);
-            this.tabPage2.Controls.Add(this.checkBox1);
+            this.tabPage2.Controls.Add(this.CRC32CheckBox);
+            this.tabPage2.Controls.Add(this.antiManagedDebugCheckBox);
+            this.tabPage2.Controls.Add(this.antiDebugNativeCheckBox);
+            this.tabPage2.Controls.Add(this.antiDumpCheckBox);
             this.tabPage2.Controls.Add(this.methodEncryptionCheckBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -144,6 +145,72 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // AntiManagedDebugNumericUpDown
+            // 
+            this.AntiManagedDebugNumericUpDown.Location = new System.Drawing.Point(136, 87);
+            this.AntiManagedDebugNumericUpDown.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.AntiManagedDebugNumericUpDown.Name = "AntiManagedDebugNumericUpDown";
+            this.AntiManagedDebugNumericUpDown.Size = new System.Drawing.Size(105, 20);
+            this.AntiManagedDebugNumericUpDown.TabIndex = 2;
+            this.AntiManagedDebugNumericUpDown.Value = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Native methods";
+            // 
+            // CRC32CheckBox
+            // 
+            this.CRC32CheckBox.AutoSize = true;
+            this.CRC32CheckBox.Location = new System.Drawing.Point(6, 111);
+            this.CRC32CheckBox.Name = "CRC32CheckBox";
+            this.CRC32CheckBox.Size = new System.Drawing.Size(94, 17);
+            this.CRC32CheckBox.TabIndex = 0;
+            this.CRC32CheckBox.Text = "CRC32 Check";
+            this.CRC32CheckBox.UseVisualStyleBackColor = true;
+            // 
+            // antiManagedDebugCheckBox
+            // 
+            this.antiManagedDebugCheckBox.AutoSize = true;
+            this.antiManagedDebugCheckBox.Location = new System.Drawing.Point(6, 88);
+            this.antiManagedDebugCheckBox.Name = "antiManagedDebugCheckBox";
+            this.antiManagedDebugCheckBox.Size = new System.Drawing.Size(124, 17);
+            this.antiManagedDebugCheckBox.TabIndex = 0;
+            this.antiManagedDebugCheckBox.Text = "Anti managed debug";
+            this.antiManagedDebugCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // antiDebugNativeCheckBox
+            // 
+            this.antiDebugNativeCheckBox.AutoSize = true;
+            this.antiDebugNativeCheckBox.Location = new System.Drawing.Point(6, 65);
+            this.antiDebugNativeCheckBox.Name = "antiDebugNativeCheckBox";
+            this.antiDebugNativeCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.antiDebugNativeCheckBox.TabIndex = 0;
+            this.antiDebugNativeCheckBox.Text = "Anti native debug";
+            this.antiDebugNativeCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // antiDumpCheckBox
+            // 
+            this.antiDumpCheckBox.AutoSize = true;
+            this.antiDumpCheckBox.Location = new System.Drawing.Point(6, 42);
+            this.antiDumpCheckBox.Name = "antiDumpCheckBox";
+            this.antiDumpCheckBox.Size = new System.Drawing.Size(73, 17);
+            this.antiDumpCheckBox.TabIndex = 0;
+            this.antiDumpCheckBox.Text = "Anti dump";
+            this.antiDumpCheckBox.UseVisualStyleBackColor = true;
             // 
             // methodEncryptionCheckBox
             // 
@@ -155,93 +222,36 @@
             this.methodEncryptionCheckBox.Text = "Method Encryption";
             this.methodEncryptionCheckBox.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // panel1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 42);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(73, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Anti dump";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.panel1.Controls.Add(this.x64CheckBox);
+            this.panel1.Controls.Add(this.x32CheckBox);
+            this.panel1.Location = new System.Drawing.Point(125, 19);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(120, 17);
+            this.panel1.TabIndex = 3;
             // 
-            // label1
+            // x64CheckBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Native methods";
+            this.x64CheckBox.AutoSize = true;
+            this.x64CheckBox.Checked = true;
+            this.x64CheckBox.Location = new System.Drawing.Point(69, 0);
+            this.x64CheckBox.Name = "x64CheckBox";
+            this.x64CheckBox.Size = new System.Drawing.Size(51, 17);
+            this.x64CheckBox.TabIndex = 4;
+            this.x64CheckBox.TabStop = true;
+            this.x64CheckBox.Text = "64-bit";
+            this.x64CheckBox.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // x32CheckBox
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(6, 111);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(94, 17);
-            this.checkBox2.TabIndex = 0;
-            this.checkBox2.Text = "CRC32 Check";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(6, 65);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(109, 17);
-            this.checkBox3.TabIndex = 0;
-            this.checkBox3.Text = "Anti native debug";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(6, 88);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(124, 17);
-            this.checkBox4.TabIndex = 0;
-            this.checkBox4.Text = "Anti managed debug";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(136, 87);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            99999999,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(105, 20);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(127, 18);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(51, 17);
-            this.radioButton1.TabIndex = 3;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "32-bit";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(175, 18);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(51, 17);
-            this.radioButton2.TabIndex = 3;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "64-bit";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.x32CheckBox.AutoSize = true;
+            this.x32CheckBox.Location = new System.Drawing.Point(0, 0);
+            this.x32CheckBox.Name = "x32CheckBox";
+            this.x32CheckBox.Size = new System.Drawing.Size(51, 17);
+            this.x32CheckBox.TabIndex = 5;
+            this.x32CheckBox.Text = "32-bit";
+            this.x32CheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -259,7 +269,9 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -276,13 +288,14 @@
         private System.Windows.Forms.CheckBox methodEncryptionCheckBox;
         private System.Windows.Forms.TextBox outputTextBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.CheckBox antiDumpCheckBox;
+        private System.Windows.Forms.CheckBox CRC32CheckBox;
+        private System.Windows.Forms.CheckBox antiDebugNativeCheckBox;
+        private System.Windows.Forms.NumericUpDown AntiManagedDebugNumericUpDown;
+        private System.Windows.Forms.CheckBox antiManagedDebugCheckBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton x64CheckBox;
+        private System.Windows.Forms.RadioButton x32CheckBox;
     }
 }
 

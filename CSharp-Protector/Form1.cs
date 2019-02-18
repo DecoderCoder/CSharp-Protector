@@ -32,7 +32,19 @@ namespace CSharp_Protector
         private void protectButton_Click(object sender, EventArgs e)
         {
             Protector protect = new Protector();
-            protect.Protect(ProtectFlag.MethodEncoding);
+            ProtectFlag flags= ProtectFlag.None;
+
+            if (antiDebugNativeCheckBox.Checked)
+                flags |= ProtectFlag.AntiDebugNativeDef;
+            if (antiManagedDebugCheckBox.Checked)
+                flags |= ProtectFlag.AntiDebugManagedDef;
+            if (antiDumpCheckBox.Checked)
+                flags |= ProtectFlag.AntiDumpDef;
+            if (methodEncryptionCheckBox.Checked)
+                flags |= ProtectFlag.MethodEncryptionDef;
+            if (CRC32CheckBox.Checked)
+                flags |= ProtectFlag.CRC32CheckDef;
+            protect.Protect(flags, x64CheckBox.Checked, (long)AntiManagedDebugNumericUpDown.Value);
         }
 
         private void button1_Click(object sender, EventArgs e)
