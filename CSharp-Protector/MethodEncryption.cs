@@ -173,12 +173,9 @@ namespace CSharp_Protector
                 bwriter.Write(encrypted[i]);
             }
 
-            byte[] randomBytes = new byte[code2];
-            random.NextBytes(randomBytes);
-
             for (var i = code1; i < encrypted.Length; i++)
             {
-                bwriter.Write(randomBytes[i - code1]);
+                bwriter.Write(0x0);
             }
 
             Code2Array = new byte[code2];
