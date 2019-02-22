@@ -29,24 +29,6 @@ namespace CSharp_Protector
             Globals.Log(text);
         }
 
-        private void protectButton_Click(object sender, EventArgs e)
-        {
-            Protector protect = new Protector();
-            ProtectFlag flags= ProtectFlag.None;
-
-            if (antiDebugNativeCheckBox.Checked)
-                flags |= ProtectFlag.AntiDebugNativeDef;
-            if (antiManagedDebugCheckBox.Checked)
-                flags |= ProtectFlag.AntiDebugManagedDef;
-            if (antiDumpCheckBox.Checked)
-                flags |= ProtectFlag.AntiDumpDef;
-            if (methodEncryptionCheckBox.Checked)
-                flags |= ProtectFlag.MethodEncryptionDef;
-            if (CRC32CheckBox.Checked)
-                flags |= ProtectFlag.CRC32CheckDef;
-            protect.Protect(flags, x64CheckBox.Checked, (long)AntiManagedDebugNumericUpDown.Value);
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openAssemblyDlg = new OpenFileDialog();
@@ -75,11 +57,27 @@ namespace CSharp_Protector
                 }
                 Log();
                 protectButton.Enabled = true;
+                
             }
             else
             {
                 Log("Failed to open assembly");
             }
+        }
+
+        private void protectButton_Click_1(object sender, EventArgs e)
+        {
+            Globals.LogClear();
+            Protector protect = new Protector();
+
+            protect.AntiDebugNativeDef = antiDebugNativeCheckBox.Checked;
+            protect.AntiDebugManagedDef = antiManagedDebugCheckBox.Checked;
+            protect.AntiDumpDef = antiDumpCheckBox.Checked;
+            protect.MethodEncryptionDef = methodEncryptionCheckBox.Checked;
+            protect.Crc32CheckDef = CRC32CheckBox.Checked;
+
+            protect.ControlFlowB = controlFlowCheckBox.Checked;
+            protect.Protect(x64CheckBox.Checked, (long)AntiManagedDebugNumericUpDown.Value);
         }
     }
 }

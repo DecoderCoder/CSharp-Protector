@@ -31,26 +31,28 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.outputTextBox = new System.Windows.Forms.TextBox();
-            this.protectButton = new System.Windows.Forms.Button();
             this.addAssemblyButton = new System.Windows.Forms.Button();
             this.selectAssemblyButton = new System.Windows.Forms.Button();
             this.assemblyPathTextBox = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.x64CheckBox = new System.Windows.Forms.RadioButton();
+            this.x32CheckBox = new System.Windows.Forms.RadioButton();
             this.AntiManagedDebugNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.CRC32CheckBox = new System.Windows.Forms.CheckBox();
             this.antiManagedDebugCheckBox = new System.Windows.Forms.CheckBox();
             this.antiDebugNativeCheckBox = new System.Windows.Forms.CheckBox();
             this.antiDumpCheckBox = new System.Windows.Forms.CheckBox();
             this.methodEncryptionCheckBox = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.x64CheckBox = new System.Windows.Forms.RadioButton();
-            this.x32CheckBox = new System.Windows.Forms.RadioButton();
+            this.protectButton = new System.Windows.Forms.Button();
+            this.controlFlowCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -60,20 +62,19 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(673, 589);
+            this.tabControl1.Size = new System.Drawing.Size(673, 563);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.outputTextBox);
-            this.tabPage1.Controls.Add(this.protectButton);
             this.tabPage1.Controls.Add(this.addAssemblyButton);
             this.tabPage1.Controls.Add(this.selectAssemblyButton);
             this.tabPage1.Controls.Add(this.assemblyPathTextBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(665, 563);
+            this.tabPage1.Size = new System.Drawing.Size(665, 537);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Assemblies";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -87,17 +88,6 @@
             this.outputTextBox.Size = new System.Drawing.Size(653, 469);
             this.outputTextBox.TabIndex = 3;
             this.outputTextBox.WordWrap = false;
-            // 
-            // protectButton
-            // 
-            this.protectButton.Enabled = false;
-            this.protectButton.Location = new System.Drawing.Point(6, 537);
-            this.protectButton.Name = "protectButton";
-            this.protectButton.Size = new System.Drawing.Size(653, 23);
-            this.protectButton.TabIndex = 2;
-            this.protectButton.Text = "Protect";
-            this.protectButton.UseVisualStyleBackColor = true;
-            this.protectButton.Click += new System.EventHandler(this.protectButton_Click);
             // 
             // addAssemblyButton
             // 
@@ -132,7 +122,9 @@
             // 
             this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.AntiManagedDebugNumericUpDown);
+            this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.controlFlowCheckBox);
             this.tabPage2.Controls.Add(this.CRC32CheckBox);
             this.tabPage2.Controls.Add(this.antiManagedDebugCheckBox);
             this.tabPage2.Controls.Add(this.antiDebugNativeCheckBox);
@@ -141,10 +133,41 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(665, 563);
+            this.tabPage2.Size = new System.Drawing.Size(665, 537);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.x64CheckBox);
+            this.panel1.Controls.Add(this.x32CheckBox);
+            this.panel1.Location = new System.Drawing.Point(125, 19);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(120, 17);
+            this.panel1.TabIndex = 3;
+            // 
+            // x64CheckBox
+            // 
+            this.x64CheckBox.AutoSize = true;
+            this.x64CheckBox.Checked = true;
+            this.x64CheckBox.Location = new System.Drawing.Point(69, 0);
+            this.x64CheckBox.Name = "x64CheckBox";
+            this.x64CheckBox.Size = new System.Drawing.Size(51, 17);
+            this.x64CheckBox.TabIndex = 4;
+            this.x64CheckBox.TabStop = true;
+            this.x64CheckBox.Text = "64-bit";
+            this.x64CheckBox.UseVisualStyleBackColor = true;
+            // 
+            // x32CheckBox
+            // 
+            this.x32CheckBox.AutoSize = true;
+            this.x32CheckBox.Location = new System.Drawing.Point(0, 0);
+            this.x32CheckBox.Name = "x32CheckBox";
+            this.x32CheckBox.Size = new System.Drawing.Size(51, 17);
+            this.x32CheckBox.TabIndex = 5;
+            this.x32CheckBox.Text = "32-bit";
+            this.x32CheckBox.UseVisualStyleBackColor = true;
             // 
             // AntiManagedDebugNumericUpDown
             // 
@@ -162,6 +185,15 @@
             0,
             0,
             0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 131);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "IL methods";
             // 
             // label1
             // 
@@ -222,42 +254,33 @@
             this.methodEncryptionCheckBox.Text = "Method Encryption";
             this.methodEncryptionCheckBox.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // protectButton
             // 
-            this.panel1.Controls.Add(this.x64CheckBox);
-            this.panel1.Controls.Add(this.x32CheckBox);
-            this.panel1.Location = new System.Drawing.Point(125, 19);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 17);
-            this.panel1.TabIndex = 3;
+            this.protectButton.Enabled = false;
+            this.protectButton.Location = new System.Drawing.Point(12, 581);
+            this.protectButton.Name = "protectButton";
+            this.protectButton.Size = new System.Drawing.Size(673, 23);
+            this.protectButton.TabIndex = 3;
+            this.protectButton.Text = "Protect";
+            this.protectButton.UseVisualStyleBackColor = true;
+            this.protectButton.Click += new System.EventHandler(this.protectButton_Click_1);
             // 
-            // x64CheckBox
+            // controlFlowCheckBox
             // 
-            this.x64CheckBox.AutoSize = true;
-            this.x64CheckBox.Checked = true;
-            this.x64CheckBox.Location = new System.Drawing.Point(69, 0);
-            this.x64CheckBox.Name = "x64CheckBox";
-            this.x64CheckBox.Size = new System.Drawing.Size(51, 17);
-            this.x64CheckBox.TabIndex = 4;
-            this.x64CheckBox.TabStop = true;
-            this.x64CheckBox.Text = "64-bit";
-            this.x64CheckBox.UseVisualStyleBackColor = true;
-            // 
-            // x32CheckBox
-            // 
-            this.x32CheckBox.AutoSize = true;
-            this.x32CheckBox.Location = new System.Drawing.Point(0, 0);
-            this.x32CheckBox.Name = "x32CheckBox";
-            this.x32CheckBox.Size = new System.Drawing.Size(51, 17);
-            this.x32CheckBox.TabIndex = 5;
-            this.x32CheckBox.Text = "32-bit";
-            this.x32CheckBox.UseVisualStyleBackColor = true;
+            this.controlFlowCheckBox.AutoSize = true;
+            this.controlFlowCheckBox.Location = new System.Drawing.Point(6, 147);
+            this.controlFlowCheckBox.Name = "controlFlowCheckBox";
+            this.controlFlowCheckBox.Size = new System.Drawing.Size(84, 17);
+            this.controlFlowCheckBox.TabIndex = 0;
+            this.controlFlowCheckBox.Text = "Control Flow";
+            this.controlFlowCheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(697, 613);
+            this.Controls.Add(this.protectButton);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -269,9 +292,9 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AntiManagedDebugNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -284,7 +307,6 @@
         private System.Windows.Forms.Button selectAssemblyButton;
         private System.Windows.Forms.TextBox assemblyPathTextBox;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button protectButton;
         private System.Windows.Forms.CheckBox methodEncryptionCheckBox;
         private System.Windows.Forms.TextBox outputTextBox;
         private System.Windows.Forms.Label label1;
@@ -296,6 +318,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton x64CheckBox;
         private System.Windows.Forms.RadioButton x32CheckBox;
+        private System.Windows.Forms.Button protectButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox controlFlowCheckBox;
     }
 }
 

@@ -35,6 +35,7 @@ namespace CSharp_Protector
             ptr = ptr2 = ptr + 0x4 + optSize;
 
             byte* @new = stackalloc byte[11];
+
             if (module.FullyQualifiedName[0] != '<') //Mapped
             {
                 byte* mdDir = bas + *(uint*) (ptr - 16);
